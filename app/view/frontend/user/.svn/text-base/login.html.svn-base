@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/login_v2.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:19:49 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>个人中心（test） - 登录</title>
+    <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+    <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+    <link href="backend/css/bootstrap.min.css" rel="stylesheet">
+    <link href="backend/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="backend/css/animate.min.css" rel="stylesheet">
+    <link href="backend/css/style.min.css" rel="stylesheet">
+    <link href="backend/css/login.min.css" rel="stylesheet">
+    <script src="backend/js/common.js" type="text/javascript"></script>
+    <script src="backend/js/md5.js" type="text/javascript"></script>
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>
+        if(window.top!==window.self){window.top.location=window.location};
+    </script>
+
+</head>
+
+<body class="signin">
+    <div class="signinpanel">
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="signin-info">
+                    <div class="logopanel m-b">
+                        <h1>[ Hi ]</h1>
+                    </div>
+                    <div class="m-b"></div>
+                    <h4>欢迎登录 <strong>www.lcode.cc</strong></h4>
+                    <ul class="m-b">
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 独立开发</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> MVC思想</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 框架设计</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 文章管理</li>
+                        <li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 分类管理</li>
+                    </ul>
+                    <strong>还没有账号？ <a href="index.php?p=frontend&c=User&a=register">立即注册&raquo;</a></strong>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <form method="post" name="form">
+                    <h4 class="no-margins">登录：</h4>
+                    <p class="m-t-md">登录到个人中心</p>
+                    <input type="text" id="edtUserName" name="edtUserName" class="form-control uname" placeholder="用户名" />
+                    <input type="password" id="edtPassWord" name="edtUserName" class="form-control pword m-b" placeholder="密码" />
+                    验证码:<input type="text" id="edtCaptcha" name="edtCaptcha" size="20" value="" tabindex="3" style="width:70px;color:black;"/>
+                    <img src="index.php?p=frontend&c=User&a=captcha" width="100" height="30" onClick="this.src = 'index.php?p=backend&c=User&a=captcha&' + Math.random()" />
+                    <br />
+                    <a href="#">忘记密码了？</a>
+                    <button class="btn btn-success btn-block" id="btnPost" name="btnPost">登录</button>
+                    <input type="hidden" name="username" id="username" value="" />
+                    <input type="hidden" name="password" id="password" value="" />
+                </form>
+            </div>
+        </div>
+        <div class="signup-footer">
+            <div class="pull-left">
+                &copy; 2015 All Rights Reserved. H+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        $("#btnPost").click(function(){
+
+            var strUserName=$("#edtUserName").val();
+            var strPassWord=$("#edtPassWord").val();
+
+            if((strUserName=="")||(strPassWord=="")){
+                alert("用户名和密码不能为空");
+                return false;
+            }
+
+            $("#edtUserName").remove();
+            $("#edtPassWord").remove();
+            //alert(MD5(strPassWord));
+            strUserName=strUserName;
+            strPassWord=MD5(strPassWord);
+
+            $("form").attr("action","index.php?a=login&c=User&p=frontend");
+            $("#username").val(strUserName);
+            $("#password").val(strPassWord);
+
+        });
+
+        $(document).ready(function(){
+            if (!$.support.leadingWhitespace) {
+                alert("骚年,你还在用IE6,7,8内核的浏览器么?请升级至支持html5的IE9吧!\r\n要不咱换个Chrome,Firefox试试(—.—||||");
+            }
+        });
+
+    </script>
+</body>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/login_v2.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:19:52 GMT -->
+</html>

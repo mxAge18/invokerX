@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="none" />
+    <link rel="shortcut icon" href="../favicon.ico" />
+	<link rel="stylesheet" href="backend/css/admin.css" type="text/css" media="screen" />
+	<script src="backend/script/common.js" type="text/javascript"></script>
+	<title>www.myblog.com - 登录 - Powered by myblog</title>
+</head>
+<header class="header">    <div class="logo"><a href="#"></a></div>
+    <div class="user"style="min-width:800px;max-width:1000px"> <a href="" title="编辑"><img src="backend/image/admin/0.png" width="40" hei ght="40" id="avatar" alt="Avatar" /></a>
+      <div class="username" >用户名：<?= $_SESSION['publicUser']['username']?>；上次登录时间是：<?= date('Y-m-d H:i:s',$_SESSION['loginTime'])?>；上次登录的IP地址是：<?= $_SESSION['REMOTE_ADDR']?></div>
+      <div class="userbtn"><a class="profile" href="index.php?p=frontend&c=Article&a=getList" title="" target="_blank">站点首页</a>&nbsp;&nbsp;<a class="logout" href="index.php?p=frontend&c=User&a=logout" title="" target="__top">退出登录</a></div>
+    </div>
+    <div class="menu">
+      <ul id="topmenu">
+<li id="topmenu1"><a href="" target="_self">个人中心首页</a></li><li id="topmenu2"><a href="" target="_self">:)</a></li><li id="topmenu3"><a href="" target="_blank"></a></li>      </ul>
+    </div>
+</header>

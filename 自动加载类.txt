@@ -1,0 +1,133 @@
+php自动加载类
+1  为了增加类加载的灵活性
+2  自动加载函数的执行的触发
+    1 new 类名  找不到类名
+    2 extends 类名 找不到类名
+    3 类名::方法() 找不到类名
+    4 类名::常量   找不到类名
+    5 类名::静态常量 找不到类名
+        常量的设定define('PLATFORM',$p);
+/*********************************************************************************************************/
+index.php:
+
+<?php
+/***********引入模型基类、控制器基类以及数据库执行文件，**************************************/
+require './Frames/MySQLDB.class.php';
+require "./Frames/BaseModel.php";
+require "./Frames/BaseController.php";
+/***********利用GET传值获取平台名（前台或者后台）**************************************/
+$p = isset($_GET['p']) ? $_GET['p'] : 'backend';
+/***********为方便函数中应用$p，将每次执行获取得到的平台名定义为常量，供自动加载类中文件目录的函数使用****/
+define('PLATFORM',$p);
+/***********利用GET传值获取平台名（前台或者后台）**************************************/
+function autoload($className){
+    if(substr($className,-10)=='Controller'){
+        require "./".PLATFORM."/Controllers/".$className.".php";
+    }else if(substr($className,-5)=='Model'){
+        require "./".PLATFORM."/Models/".$className.".php";
+    }
+}
+spl_autoload_register('autoload');
+/***********GET传值获取a，用来执行控制器不同方法，list为产品列表，add为增加页面，del删除**************************************/
+$a = isset($_GET['a']) ? $_GET['a'] : 'list1';
+/***********利用GET传值获取类名，如果类未加载，则自动加载**************************************/
+$className = (isset($_GET['c']) ? $_GET['c'] : "Product")."Controller";
+$ctrl = new $className();
+$ctrl->$a();
+
+//***********************************************************************************************
+ProductController.php:
+<?php
+/*if($a==list){
+    显示产品列表
+        1、利用Model查询所有产品；
+        2、加载html文件，View；
+}else if($a ==del){
+    删除产品
+        1、获取删除的id
+        2、利用Model删除产品；
+        3、成功或者失败，给出提示，跳转至原来页面
+}*/
+<?php
+header("Content-Type:text/html;charset:utf-8");
+//最终的控制器的格式()
+class ProductController extends BaseController{
+    public function list1(){
+        $pro = BaseModel::create('ProductModel');
+        $products = $pro->GetProduct();
+        $counts =$pro->GetCount();
+        require "./backend/Views/ProductView.html";
+    }
+    public function del(){
+        $pro = BaseModel::create('ProductModel');
+        $id = $_GET['id'];
+        if($pro->DelProduct($id)){
+            $msg = '成功';
+            $url = 'index';
+            $jumpTime = 5;
+            $this->jump($url,$msg,$jumpTime);
+        }else{
+            $msg ='失败';
+            $url = 'index';
+            $jumpTime = 5;
+            $this->jump($url,$msg,$jumpTime);
+        }
+    }
+    public function add(){
+        require_once "./backend/Views/Add.html";
+        $pro = BaseModel::create('ProductModel');
+        if(isset($_POST['ac'])&&$_POST['ac']=='acc'){
+            $pro->AddProduct($_POST);
+            $msg = '成功';
+            $url = 'index';
+            $jumpTime = 5;
+            $this->jump($url,$msg,$jumpTime);
+
+        }else{
+            $msg ='失败';
+            $url = 'index';
+            $jumpTime = 5;
+            $this->jump($url,$msg,$jumpTime);
+        }
+    }
+}
+
+<?php
+/**
+ * Created by PhpStorm.
+ * User: ml
+ * Date: 2017/1/9
+ * Time: 11:03
+ */
+//引入数据库操作类文件
+//require 'MySQLDB.class.php';
+//创建一个基类，供其他类继承重复代码
+class BaseModel{
+    protected $_db;
+    //在构造函数里面进行连接数据库操作
+    protected $config= array(
+        'host'=>'localhost',
+        'port'=>'3306',
+        'user'=>'root',
+        'pwd'=>'mx3191006',
+        'charset'=>'utf8',
+        'dbname'=>'shop'
+        );
+    public function __construct(){
+        $config = $this->config;
+        $this->_db = MySQLDB::GetDB($config);
+        return $this->_db;
+    }
+    public static function create($modelClassName){
+        //require "xx.model";
+        $models = array();
+        if(isset($models[$modelClassName])){
+            return $models[$modelClassName];
+        }else{
+            $xx = new $modelClassName;
+            return $models[$modelClassName] = $xx;
+        }
+
+       // return $xx;
+    }
+}
